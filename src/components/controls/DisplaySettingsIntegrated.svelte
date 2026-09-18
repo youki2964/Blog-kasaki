@@ -73,6 +73,14 @@ type TabKey = "appearance" | "wallpaper" | "effects";
 
 let hue = $state(getHue());
 const defaultHue = getDefaultHue();
+const themePalettes = [
+	{ name: "水蓝色", hue: 200, color: "oklch(0.7 0.14 200)" },
+	{ name: "青绿色", hue: 165, color: "oklch(0.7 0.14 165)" },
+	{ name: "天蓝色", hue: 220, color: "oklch(0.7 0.14 220)" },
+	{ name: "樱粉色", hue: 345, color: "oklch(0.7 0.14 345)" },
+	{ name: "琥珀色", hue: 40, color: "oklch(0.7 0.14 40)" },
+	{ name: "紫罗兰", hue: 275, color: "oklch(0.7 0.14 275)" },
+];
 let wallpaperMode: WALLPAPER_MODE = $state(backgroundWallpaper.mode);
 const defaultWallpaperMode = backgroundWallpaper.mode;
 let fullscreenLayout: FullscreenWallpaperLayout = $state(
@@ -322,6 +330,10 @@ let hasVisibleOverlaySlider = $derived(
 function resetHue() {
 	hue = getDefaultHue();
 	requestAnimationFrame(refreshAllRangeProgress);
+}
+
+function selectHue(selectedHue: number) {
+	hue = selectedHue;
 }
 
 function resetWallpaperMode() {
@@ -695,14 +707,26 @@ $effect(() => {
 						<Icon icon="fa7-solid:arrow-rotate-left" class="text-[0.75rem]"></Icon>
 					</div>
 				</button>
-				<div id="hueValue" class="transition bg-(--btn-regular-bg) rounded-md flex justify-center
-				font-bold items-center text-(--btn-content)">
+			<div id="hueValue" class="transition bg-(--btn-regular-bg) rounded-md flex justify-center
+			font-bold items-center text-(--btn-content)">
 					{hue}
 				</div>
 			</div>
-			<div class="hue-slider-shell w-full h-6 px-1 bg-[oklch(0.80_0.10_0)] dark:bg-[oklch(0.70_0.10_0)] rounded-md select-none">
-				<input aria-label={i18n(I18nKey.themeColor)} type="range" min="0" max="360" bind:value={hue}
-					   class="slider" id="colorSlider" step="5" style="width: 100%">
+			<div class="theme-palette-grid" role="group" aria-label={i18n(I18nKey.themeColor)}>
+				{#each themePalettes as palette}
+					<button
+						type="button"
+						class="theme-palette-button"
+						class:is-selected={hue === palette.hue}
+						aria-label={palette.name}
+						aria-pressed={hue === palette.hue}
+						title={`${palette.name}（${palette.hue}°）`}
+						onclick={() => selectHue(palette.hue)}
+					>
+						<span class="theme-palette-swatch" style={`--palette-color: ${palette.color}`}></span>
+						<span>{palette.name}</span>
+					</button>
+				{/each}
 			</div>
 		</div>
 		{/if}
