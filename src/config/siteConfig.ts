@@ -48,7 +48,7 @@ export const siteConfig: SiteConfig = {
 	subtitle: "人啊，再怎么繁忙，也赶不上时间匆匆",
 
 	// 站点 URL
-	site_url: "https://firefly.cuteleaf.cn",
+	site_url: "https://kasaki.ashui.cn",
 
 	// 站点描述
 	description: "水江梓的个人博客，记录学习、生活与创造。",

@@ -148,6 +148,86 @@
    [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/CuteLeaf/Firefly&project-name=Firefly&repository-name=Firefly)
    [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/CuteLeaf/Firefly)
 
+## 🧭 本站维护指南
+
+### 更换背景视频
+
+背景视频配置位于 `src/config/backgroundWallpaper.ts` 的 `playerUrl`。
+
+使用本地视频时，将视频放入 `public/assets/videos/`，然后填写以 `/assets/` 开头的路径：
+
+```typescript
+playerUrl: "/assets/videos/my-background.mp4",
+```
+
+也可以直接填写 HTTPS 视频地址，或配置多个视频循环播放：
+
+```typescript
+playerUrl: [
+  "/assets/videos/scene-1.mp4",
+  "https://example.com/scene-2.mp4",
+],
+```
+
+建议使用经过压缩的 MP4 视频，控制文件大小以减少首屏加载时间。浏览器可能会限制带声音的自动播放，因此背景视频应准备为静音视频；用户也可以通过页面上的视频播放控制进行操作。
+
+### 发布新文章
+
+文章文件放在 `src/content/posts/`，支持 Markdown（`.md`）和 MDX（`.mdx`）。例如新建 `src/content/posts/my-first-post.md`：
+
+```markdown
+---
+title: 我的第一篇文章
+published: 2026-09-19
+description: 这篇文章的简短摘要。
+tags: [生活, 随笔]
+category: 随笔
+image: ./cover.webp
+draft: false
+---
+
+这里开始写文章正文。
+```
+
+常用字段说明：
+
+- `title`：文章标题。
+- `published`：发布日期，格式为 `YYYY-MM-DD`。
+- `description`：文章摘要，用于文章卡片和 SEO。
+- `tags`：文章标签数组。
+- `category`：文章分类。
+- `image`：封面图路径，可使用文章目录中的相对路径、`public` 路径或远程图片地址。
+- `draft`：设为 `true` 时不发布，正式发布时设为 `false` 或删除该字段。
+
+本地预览文章：
+
+```powershell
+pnpm dev
+```
+
+确认内容无误后提交并推送：
+
+```powershell
+git add .
+git commit -m "docs: publish a new post"
+git push origin main
+```
+
+Vercel 检测到 GitHub 更新后会自动执行 `pnpm build` 并发布新版本。
+
+### 绑定站点域名
+
+1. 打开 Vercel 项目，进入 **Settings → Domains**。
+2. 添加 `kasaki.ashui.cn`。
+3. 在域名 DNS 管理处，为 `kasaki` 添加 Vercel 页面提示的 CNAME 记录。Vercel 常见的目标是 `cname.vercel-dns.com`，请以项目页面显示的目标为准。
+4. 等待 DNS 和 HTTPS 证书生效。
+5. 访问以下地址确认站点链接已切换：
+   - `https://kasaki.ashui.cn/`
+   - `https://kasaki.ashui.cn/sitemap-index.xml`
+   - `https://kasaki.ashui.cn/rss.xml`
+
+站点地址配置在 `src/config/siteConfig.ts` 的 `site_url`。修改后，sitemap、RSS、canonical URL 和 Open Graph 地址会使用新域名。
+
 ## 📖 配置说明
 
 > 📚 **详细配置文档**: 查看 [Firefly 使用文档](https://docs-firefly.cuteleaf.cn/) 获取完整的配置指南
