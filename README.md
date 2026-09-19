@@ -407,3 +407,15 @@ location: China # 位置
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+
+### 管理后台环境变量
+
+启用 SSR 后，管理后台位于 /admin/，需要在部署平台配置：
+
+- ADMIN_TOKEN：后台访问令牌。
+- GITHUB_OWNER：GitHub 用户名或组织名。
+- GITHUB_REPO：仓库名。
+- GITHUB_BRANCH：提交分支，默认 main。
+- GITHUB_TOKEN：具备仓库内容读写权限的 GitHub Token。
+
+后台支持发布动态、文章草稿/置顶、删除内容、编辑公告，以及背景图上传和删除。删除操作会保留 Git 历史，可通过 GitHub 恢复。

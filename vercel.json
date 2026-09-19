@@ -3,6 +3,7 @@
   "outputDirectory": "dist",
   "installCommand": "pnpm install",
   "framework": "astro",
+  "functions": { "src/pages/api/**/*.ts": { "maxDuration": 30 } },
   "headers": [
     {
       "source": "/(.*)",

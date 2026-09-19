@@ -1,5 +1,9 @@
 import { backgroundWallpaper } from "../config";
 
+const desktopWallpaperModules = import.meta.glob("../assets/images/DesktopWallpaper/*.{avif,webp,jpg,jpeg,png}", { eager: true, import: "default", query: "?url" });
+const mobileWallpaperModules = import.meta.glob("../assets/images/MobileWallpaper/*.{avif,webp,jpg,jpeg,png}", { eager: true, import: "default", query: "?url" });
+const discoveredWallpapers = (modules: Record<string, unknown>): string[] => Object.entries(modules).sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true })).map(([, value]) => String(value));
+
 export type BackgroundImages = {
 	desktop: string[];
 	mobile: string[];
@@ -17,6 +21,8 @@ const toArray = (src: string | string[] | undefined): string[] => {
 // 返回所有配置的图片（用于构建时渲染所有图片）
 export const getBackgroundImages = (): BackgroundImages => {
 	const bgSrc = backgroundWallpaper.src;
+	const discoveredDesktop = discoveredWallpapers(desktopWallpaperModules);
+	const discoveredMobile = discoveredWallpapers(mobileWallpaperModules);
 
 	if (
 		typeof bgSrc === "object" &&
@@ -28,8 +34,8 @@ export const getBackgroundImages = (): BackgroundImages => {
 			desktop?: string | string[];
 			mobile?: string | string[];
 		};
-		const desktopImages = toArray(srcObj.desktop);
-		const mobileImages = toArray(srcObj.mobile);
+		const desktopImages = discoveredDesktop.length > 0 ? discoveredDesktop : toArray(srcObj.desktop);
+		const mobileImages = discoveredMobile.length > 0 ? discoveredMobile : toArray(srcObj.mobile);
 		return {
 			desktop: desktopImages.length > 0 ? desktopImages : mobileImages,
 			mobile: mobileImages.length > 0 ? mobileImages : desktopImages,
